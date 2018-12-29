@@ -40,9 +40,9 @@ func getIV() []byte {
 	return make([]byte, 16)
 }
 
-func main() {
-	key := []byte("YELLOW SUBMARINE")
-	file := ReadFile("10.txt")
+func cbcDecrypt(filename string, keystr string) string {
+	key := []byte(keystr)
+	file := ReadFile(filename)
 	bytesIn, _ := base64.StdEncoding.DecodeString(string(file))
 	bprec := getIV()
 
@@ -64,5 +64,9 @@ func main() {
 		bprec = bytesIn[i : i+16]
 		dec = append(dec, out...)
 	}
-	fmt.Println(string(dec))
+	return string(dec)
+}
+
+func main() {
+	fmt.Println(cbcDecrypt("10.txt", "YELLOW SUBMARINE"))
 }
