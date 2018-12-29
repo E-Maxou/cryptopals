@@ -1,4 +1,4 @@
-# cryptopals
+# Cryptopals
 My solutions to the Cryptopals (from Matasano/NCC group) challenges, in golang
 https://cryptopals.com/
 
