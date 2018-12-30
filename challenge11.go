@@ -4,7 +4,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	hex "encoding/hex"
-	"fmt"
+	//"fmt"
 	"math/rand"
 	"reflect"
 	"time"
@@ -81,9 +81,11 @@ func oracleMode(cypher []byte) string {
 
 var r = rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
 
+/*
 func main() {
 	for i := 0; i < 10; i++ {
 		encrypted := encryptRandom("414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141")
 		fmt.Println(oracleMode(encrypted))
 	}
 }
+*/
