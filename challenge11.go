@@ -6,6 +6,7 @@ import (
 	hex "encoding/hex"
 	"fmt"
 	"math/rand"
+	"reflect"
 	"time"
 )
 
@@ -42,14 +43,47 @@ func encryptRandom(hexString string) []byte {
 	data = append(data, padding...)
 
 	if r.Int()%2 == 0 {
-		return ecbEncrypt(randomKey(), data)
+		return cbcEncrypt(randomKey(), data)
 	} else {
 		return ecbEncrypt(randomKey(), data)
+	}
+}
+
+func bytesToBlockArray(cypher []byte) [][]byte {
+	ret := make([][]byte, 0)
+	for i := 0; i < len(cypher)-15; i += 16 {
+		ret = append(ret, cypher[i:i+16])
+	}
+	return ret
+}
+
+func countDuplicates(elem [][]byte) int {
+	tmp := elem
+	ret := 0
+	for i := range tmp {
+		for j := range elem {
+			if i != j && reflect.DeepEqual(tmp[i], elem[j]) {
+				ret++
+			}
+		}
+	}
+	return ret
+}
+
+func oracleMode(cypher []byte) string {
+	blocks := bytesToBlockArray(cypher)
+	if countDuplicates(blocks) != 0 {
+		return "ecb"
+	} else {
+		return "cbc"
 	}
 }
 
 var r = rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
 
 func main() {
-	fmt.Println(encryptRandom("414141414114"))
+	for i := 0; i < 10; i++ {
+		encrypted := encryptRandom("414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141414141")
+		fmt.Println(oracleMode(encrypted))
+	}
 }
