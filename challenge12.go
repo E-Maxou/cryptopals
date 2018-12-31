@@ -65,8 +65,7 @@ func makeByteMap(key []byte) map[string]int {
 	return m
 }
 
-func main() {
-	key := randomKey()
+func ecbOracle(key []byte) string {
 	m := makeByteMap(key)
 	cat := ""
 	for i := 0; i < discoverKeysize()-1; i++ {
@@ -77,5 +76,10 @@ func main() {
 		encrypted := encryptConcatenation(cat, truncatedHexUnk(i), key)
 		result = append(result, byte(m[hex.EncodeToString(encrypted[:16])]))
 	}
-	fmt.Print("Challenge 12 : ", string(result))
+	return string(result)
+}
+
+func main() {
+	key := randomKey()
+	fmt.Print("Challenge 12 : ", ecbOracle(key))
 }
