@@ -4,7 +4,6 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	hex "encoding/hex"
-	//"fmt"
 	"math/rand"
 	"reflect"
 	"time"
@@ -30,8 +29,11 @@ func cbcEncrypt(key []byte, data []byte) []byte {
 }
 
 func ecbEncrypt(key []byte, data []byte) []byte {
+	for i := 0; i <= len(data)%16; i++ {
+		data = append(data, 0x04)
+	}
 	block, _ := aes.NewCipher(key)
-	for i := 0; i < len(data)-15; i += 16 {
+	for i := 0; i+15 < len(data); i += 16 {
 		block.Encrypt(data[i:i+16], data[i:i+16])
 	}
 	return data
@@ -40,6 +42,9 @@ func ecbEncrypt(key []byte, data []byte) []byte {
 func encryptRandom(hexString string) []byte {
 	data, _ := hex.DecodeString(hexString)
 	padding := make([]byte, 16-len(data)%16)
+	for i := range padding {
+		padding[i] = 0x04
+	}
 	data = append(data, padding...)
 
 	if r.Int()%2 == 0 {

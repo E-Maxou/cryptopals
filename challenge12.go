@@ -1,6 +1,6 @@
 package main
 
-// compiles with go run challene12.go challenge11.go
+// compiles with go run challene12.go challenge11.go, you need to uncomment main
 
 import "fmt"
 import b64 "encoding/base64"
@@ -44,7 +44,7 @@ func discoverKeysize() int {
 func makeByteMap(key []byte) map[string]int {
 	m := make(map[string]int)
 	beginning := ""
-	for i := 0; i < discoverKeysize()-1; i++ {
+	for i := 0; i < 15; i++ {
 		beginning += "41"
 	}
 	for i := 0; i < 256; i++ {
@@ -73,8 +73,9 @@ func ecbOracle(key []byte) string {
 	}
 	result := make([]byte, 0)
 	for i := 0; truncatedHexUnk(i) != ""; i++ {
-		encrypted := encryptConcatenation(cat, truncatedHexUnk(i), key)
-		result = append(result, byte(m[hex.EncodeToString(encrypted[:16])]))
+		toEncrypt, _ := hex.DecodeString(cat + truncatedHexUnk(i)[:2])
+		encrypted := ecbEncrypt(key, toEncrypt)
+		result = append(result, byte(m[hex.EncodeToString(encrypted)]))
 	}
 	return string(result)
 }
