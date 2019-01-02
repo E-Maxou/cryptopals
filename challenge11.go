@@ -29,7 +29,7 @@ func cbcEncrypt(key []byte, data []byte) []byte {
 }
 
 func ecbEncrypt(key []byte, data []byte) []byte {
-	for i := 0; i <= len(data)%16; i++ {
+	for i := 0; i < len(data)%16; i++ {
 		data = append(data, 0x04)
 	}
 	block, _ := aes.NewCipher(key)
