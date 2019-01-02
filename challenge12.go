@@ -82,6 +82,12 @@ func decryptFirstBlock(key []byte) []byte {
 	}
 	return result
 }
+
+// I separated the decryption between the first block and the rest, this is not really DRY but it works
+// We do very similar things in the first block and in the rest, the only difference is that the first block
+// just uses the 41s as padding, while the rest also uses the previous block, which makes it hard to write
+// in one neat function.
+
 func ecbOracle(key []byte) string {
 	b1 := decryptFirstBlock(key)
 	b1hex := hex.EncodeToString(b1)
