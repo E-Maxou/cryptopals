@@ -4,8 +4,7 @@ import "fmt"
 
 func pkcs7(str string, length int) []byte {
 	bytes := []byte(str)
-
-	pkcs7 := []byte{0x04}
+	pkcs7 := []byte{byte(length - len(bytes))}
 	fmt.Println(length)
 	limit := length - len(bytes)
 	for i := 0; i < limit; i++ {
